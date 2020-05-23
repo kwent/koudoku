@@ -5,12 +5,13 @@ module Koudoku::Subscription
 
     # We don't store these one-time use tokens, but this is what Stripe provides
     # client-side after storing the credit card information.
-    attr_accessor :credit_card_token
+    attr_accessor :credit_card_token, :skip_processing
 
     belongs_to :plan, optional: true
 
     # update details.
-    before_save :processing!
+    before_save :processing!, unless: :skip_processing
+
     def processing!
 
       # if their package level has changed ..
